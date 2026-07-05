@@ -1,0 +1,308 @@
+syntax = "proto3";
+
+package iot.v1;
+
+option go_package = "github.com/victormazeli/iot-middleware-grpc-interface/gen/go/iot/v1;iotv1";
+
+import "google/protobuf/timestamp.proto";
+
+// DeviceService is the gRPC API exposed by the IoT middleware.
+// Backends call these RPCs; middleware translates them to cabinet protocol frames over MQTT.
+service DeviceService {
+  // Network & maintenance (CS, GN, CM)
+  rpc ConfigureDevice(ConfigureDeviceRequest) returns (CommandResponse);
+  rpc QueryNetwork(QueryNetworkRequest) returns (NetworkStatusResponse);
+  rpc GetBorrowRules(GetBorrowRulesRequest) returns (BorrowRulesResponse);
+  rpc SetBorrowRules(SetBorrowRulesRequest) returns (CommandResponse);
+
+  // Inventory (CQ, CC, cached AC)
+  rpc QuerySlot(QuerySlotRequest) returns (SlotStatusResponse);
+  rpc QueryAllSlots(QueryAllSlotsRequest) returns (AllSlotsResponse);
+  rpc GetAvailableCount(GetAvailableCountRequest) returns (AvailableCountResponse);
+  rpc GetCachedInventory(GetCachedInventoryRequest) returns (AllSlotsResponse);
+
+  // Rental (BW, KW, FB, BR)
+  rpc CheckoutStandard(CheckoutRequest) returns (CheckoutResponse);
+  rpc CheckoutFast(CheckoutFastRequest) returns (CheckoutResponse);
+  rpc CheckoutSlot(CheckoutSlotRequest) returns (CheckoutResponse);
+  rpc ConfirmCheckout(ConfirmCheckoutRequest) returns (ConfirmCheckoutResponse);
+
+  // Returns (RS server-initiated confirm)
+  rpc ConfirmReturn(ConfirmReturnRequest) returns (ConfirmReturnResponse);
+
+  // Admin (FA, FL, OT, NI, SO, SQ)
+  rpc EjectAll(EjectAllRequest) returns (CommandResponse);
+  rpc DisableSlot(DisableSlotRequest) returns (DisableSlotResponse);
+  rpc RemoteUpgrade(RemoteUpgradeRequest) returns (RemoteUpgradeResponse);
+  rpc ConfigureBankID(ConfigureBankIDRequest) returns (CommandResponse);
+  rpc VendingControl(VendingControlRequest) returns (CommandResponse);
+  rpc QuerySubBoards(QuerySubBoardsRequest) returns (SubBoardInfoResponse);
+
+  // Observability
+  rpc GetDeviceState(GetDeviceStateRequest) returns (DeviceStateResponse);
+  rpc Health(HealthRequest) returns (HealthResponse);
+}
+
+message HealthRequest {}
+message HealthResponse {
+  bool mqtt_connected = 1;
+  bool rabbitmq_connected = 2;
+}
+
+message CommandResponse {
+  bool success = 1;
+  int32 result_code = 2;
+  string message = 3;
+  int64 msg_id = 4;
+}
+
+// --- ConfigureDevice (CS) ---
+
+message ConfigureDeviceRequest {
+  string device_id = 1;
+  string operation = 2; // RESETME, PK, UN, PW, ID, DM, SAVECFG, etc.
+  string param1 = 3;
+  string param2 = 4;
+}
+
+// --- QueryNetwork (GN) ---
+
+message QueryNetworkRequest {
+  string device_id = 1;
+}
+
+message NetworkStatusResponse {
+  int64 msg_id = 1;
+  string field1 = 2; // IMEI or MAC
+  string field2 = 3; // ICCID or WiFi model
+  int32 signal_strength = 4;
+  string field5 = 5;
+  string field6 = 6;
+  string field7 = 7;
+  string network_status = 8;
+}
+
+// --- Borrow rules (CM) ---
+
+message GetBorrowRulesRequest {
+  string device_id = 1;
+}
+
+message SetBorrowRulesRequest {
+  string device_id = 1;
+  int32 min_borrow_level = 2;
+  int32 checkout_op_code = 3;
+  int32 return_op_code = 4;
+  int32 lock_fault_op_code = 5;
+  int32 voice_op_code = 6;
+  int32 debug_op_code = 7;
+}
+
+message BorrowRulesResponse {
+  int64 msg_id = 1;
+  int32 min_borrow_level = 2;
+  int32 checkout_op_code = 3;
+  int32 return_op_code = 4;
+  int32 lock_fault_op_code = 5;
+  int32 voice_op_code = 6;
+  int32 debug_op_code = 7;
+  string slot_disable_mask = 8;
+  int32 inventory_interval = 9;
+  int32 heartbeat_interval = 10;
+  string brand_isolation_info = 11;
+}
+
+// --- Inventory ---
+
+message QuerySlotRequest {
+  string device_id = 1;
+  int32 slot_id = 2; // 0 = all slots (returns AC)
+}
+
+message SlotStatusResponse {
+  int64 msg_id = 1;
+  int32 slot_id = 2;
+  string bank_id = 3;
+  int32 battery_level = 4;
+  string status_flags = 5; // S1S2S3S4
+  int32 return_status = 6;
+}
+
+message QueryAllSlotsRequest {
+  string device_id = 1;
+}
+
+message AllSlotsResponse {
+  int64 msg_id = 1;
+  string device_qr_code = 2;
+  string device_addr = 3;
+  string device_info1 = 4;
+  int32 signal_strength = 5;
+  string firmware_version = 6;
+  int32 total_slots = 7;
+  repeated SlotEntry slots = 8;
+}
+
+message SlotEntry {
+  int32 slot_id = 1;
+  int32 return_status = 2;
+  string bank_id = 3;
+  int32 battery_level = 4;
+  string status_flags = 5;
+}
+
+message GetAvailableCountRequest {
+  string device_id = 1;
+}
+
+message AvailableCountResponse {
+  int64 msg_id = 1;
+  int32 available_count = 2;
+}
+
+message GetCachedInventoryRequest {
+  string device_id = 1;
+}
+
+// --- Rental ---
+
+message CheckoutRequest {
+  string device_id = 1;
+  string order_id = 2;
+}
+
+message CheckoutFastRequest {
+  string device_id = 1;
+  string order_id = 2;
+  string borrow_param = 3; // "0" standard, "1" fast-charge
+}
+
+message CheckoutSlotRequest {
+  string device_id = 1;
+  string order_id = 2;
+  int32 slot_id = 3;
+}
+
+message CheckoutResponse {
+  int64 msg_id = 1;
+  string order_id = 2;
+  int32 result_code = 3;
+  int32 slot_id = 4;
+  string bank_id = 5;
+  int32 battery_level = 6;
+  int32 lock_status = 7;
+  int32 fast_charge_flag = 8;
+}
+
+message ConfirmCheckoutRequest {
+  string device_id = 1;
+  string order_id = 2;
+}
+
+message ConfirmCheckoutResponse {
+  int64 msg_id = 1;
+  string order_id = 2;
+  int32 result_code = 3;
+  int32 slot_id = 4;
+  string bank_id = 5;
+  int32 battery_level = 6;
+  int32 lock_status = 7;
+  int32 fast_charge_flag = 8;
+}
+
+// --- Returns ---
+
+message ConfirmReturnRequest {
+  string device_id = 1;
+  int32 slot_no = 2; // 0 = batch confirm all
+  int32 confirm_code = 3; // 1 = OK, 0 = abnormal
+}
+
+message ConfirmReturnResponse {
+  int64 msg_id = 1;
+  bool success = 2;
+}
+
+// --- Admin ---
+
+message EjectAllRequest {
+  string device_id = 1;
+  int32 slot_no = 2; // 0 = all
+}
+
+message DisableSlotRequest {
+  string device_id = 1;
+  int32 slot_no = 2; // 0 = all
+  int32 op_code = 3; // 0 = enable, 1 = disable
+}
+
+message DisableSlotResponse {
+  int64 msg_id = 1;
+  string all_slots_disable_status = 2;
+}
+
+message RemoteUpgradeRequest {
+  string device_id = 1;
+  int32 op_code = 2;
+  string domain = 3;
+  int32 port = 4;
+  string path = 5;
+  string md5 = 6;
+  int64 file_size = 7;
+}
+
+message RemoteUpgradeResponse {
+  int32 result_code = 1;
+  string result_info = 2;
+}
+
+message ConfigureBankIDRequest {
+  string device_id = 1;
+  int32 slot_id = 2;
+  string new_bank_id = 3;
+}
+
+message VendingControlRequest {
+  string device_id = 1;
+  string order_id = 2;
+  string channel_param = 3;
+}
+
+message QuerySubBoardsRequest {
+  string device_id = 1;
+  int32 op_code = 2;
+}
+
+message SubBoardInfoResponse {
+  int64 msg_id = 1;
+  int32 sub_board_count = 2;
+  repeated SubBoardEntry boards = 3;
+}
+
+message SubBoardEntry {
+  int32 index = 1;
+  string board_id = 2;
+  string firmware = 3;
+}
+
+// --- Device state ---
+
+message GetDeviceStateRequest {
+  string device_id = 1;
+}
+
+message DeviceStateResponse {
+  string device_id = 1;
+  bool online = 2;
+  google.protobuf.Timestamp last_seen = 3;
+  string firmware_version = 4;
+  int32 signal_strength = 5;
+  AllSlotsResponse cached_inventory = 6;
+  PendingCheckout pending_checkout = 7;
+}
+
+message PendingCheckout {
+  string order_id = 1;
+  int64 checkout_msg_id = 2;
+  google.protobuf.Timestamp started_at = 3;
+}

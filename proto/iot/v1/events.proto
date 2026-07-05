@@ -1,0 +1,157 @@
+syntax = "proto3";
+
+package iot.v1;
+
+option go_package = "github.com/victormazeli/iot-middleware-grpc-interface/gen/go/iot/v1;iotv1";
+
+import "google/protobuf/timestamp.proto";
+
+// EventEnvelope is published to RabbitMQ exchange iot.events as JSON (protojson).
+message EventEnvelope {
+  string event_id = 1;
+  string type = 2;
+  string device_id = 3;
+  google.protobuf.Timestamp occurred_at = 4;
+  oneof payload {
+    DeviceOnlineEvent device_online = 10;
+    DeviceConfigReportEvent device_config_report = 11;
+    DeviceInventoryUpdatedEvent device_inventory_updated = 12;
+    DeviceInventoryExtendedEvent device_inventory_extended = 13;
+    DeviceSlotReportEvent device_slot_report = 14;
+    RentalCheckoutReadyEvent rental_checkout_ready = 15;
+    RentalEjectedEvent rental_ejected = 16;
+    DeviceReturnedEvent device_returned = 17;
+    DeviceReturnAbnormalEvent device_return_abnormal = 18;
+    DeviceButtonPressedEvent device_button_pressed = 19;
+    DeviceSubBoardReportEvent device_subboard_report = 20;
+    DeviceCommandFailedEvent device_command_failed = 21;
+  }
+}
+
+message DeviceOnlineEvent {
+  string device_id = 1;
+  string device_addr = 2;
+  string firmware_version = 3;
+  int32 signal_strength = 4;
+  string device_info1 = 5;
+  string device_info2 = 6;
+  string device_info3 = 7;
+  string device_info4 = 8;
+}
+
+message DeviceConfigReportEvent {
+  int64 msg_id = 1;
+  string device_id = 2;
+  string network_mode = 3;
+  string led_status = 4;
+  int32 bank_power_status = 5;
+  int32 qr_light_status = 6;
+  int32 reverse_power_slot = 7;
+}
+
+message DeviceInventoryUpdatedEvent {
+  int64 msg_id = 1;
+  string device_qr_code = 2;
+  int32 total_slots = 3;
+  repeated SlotSnapshot slots = 4;
+}
+
+message DeviceInventoryExtendedEvent {
+  int64 msg_id = 1;
+  int32 slot_count = 2;
+  repeated ExtendedSlotSnapshot slots = 3;
+}
+
+message SlotSnapshot {
+  int32 slot_id = 1;
+  int32 return_status = 2;
+  string bank_id = 3;
+  int32 battery_level = 4;
+  string status_flags = 5;
+}
+
+message ExtendedSlotSnapshot {
+  int32 slot_id = 1;
+  int32 status_code = 2;
+  string bank_model = 3;
+  int32 cycle_count = 4;
+  int32 cell_health = 5;
+  int32 actual_capacity = 6;
+  int32 charge_current = 7;
+}
+
+message DeviceSlotReportEvent {
+  int64 msg_id = 1;
+  int32 slot_id = 2;
+  string bank_id = 3;
+  int32 battery_level = 4;
+  string status_flags = 5;
+  int32 return_status = 6;
+}
+
+message RentalCheckoutReadyEvent {
+  int64 msg_id = 1;
+  string order_id = 2;
+  int32 result_code = 3;
+  int32 slot_id = 4;
+  string bank_id = 5;
+  int32 battery_level = 6;
+  int32 lock_status = 7;
+  int32 fast_charge_flag = 8;
+  string checkout_type = 9; // standard, fast, slot
+}
+
+message RentalEjectedEvent {
+  int64 msg_id = 1;
+  string order_id = 2;
+  int32 result_code = 3;
+  int32 slot_id = 4;
+  string bank_id = 5;
+  int32 battery_level = 6;
+  int32 lock_status = 7;
+  int32 fast_charge_flag = 8;
+}
+
+message DeviceReturnedEvent {
+  int64 msg_id = 1;
+  int32 result_code = 2;
+  int32 slot_id = 3;
+  string bank_id = 4;
+  int32 battery_level = 5;
+  int32 lock_status = 6;
+  int32 fast_charge_flag = 7;
+}
+
+message DeviceReturnAbnormalEvent {
+  int64 msg_id = 1;
+  int32 result_code = 2;
+  int32 slot_id = 3;
+  string bank_id = 4;
+  int32 battery_level = 5;
+  int32 lock_status = 6;
+  int32 cable_status = 7;
+}
+
+message DeviceButtonPressedEvent {
+  int64 msg_id = 1;
+  string device_id = 2;
+  int32 button_op_code = 3;
+}
+
+message DeviceSubBoardReportEvent {
+  int64 msg_id = 1;
+  int32 sub_board_count = 2;
+  repeated SubBoardSnapshot boards = 3;
+}
+
+message SubBoardSnapshot {
+  int32 index = 1;
+  string board_id = 2;
+  string firmware = 3;
+}
+
+message DeviceCommandFailedEvent {
+  string command = 1;
+  string error = 2;
+  int64 msg_id = 3;
+}
