@@ -1,6 +1,6 @@
 # iot-middleware-grpc-interface
 
-Shared gRPC and event contract for the IoT middleware and backend services.
+Shared gRPC, REST (grpc-gateway), and event contract for the IoT middleware and backend services.
 
 ## Import
 
@@ -18,6 +18,31 @@ resp, err := client.CheckoutStandard(ctx, &iotv1.CheckoutRequest{
     OrderId:  "order-123",
 })
 ```
+
+### REST client
+
+When the middleware HTTP gateway is enabled (`HTTP_LISTEN_ADDR`, default `:8080`):
+
+```bash
+curl http://localhost:8080/v1/health
+curl -X POST http://localhost:8080/v1/devices/DEVICE001/checkout/standard \
+  -H 'Content-Type: application/json' \
+  -d '{"order_id":"order-123"}'
+```
+
+JSON field names follow proto JSON mapping (`device_id`, `order_id`, snake_case).
+
+### OpenAPI / Postman
+
+Generated Swagger 2.0 spec (committed):
+
+```
+gen/openapi/iot/v1/device.swagger.json
+```
+
+Import into Postman: **Import → File** (use path above) or **Import → Link** → `http://localhost:8080/openapi.json` when the server is running.
+
+Interactive docs: `http://localhost:8080/docs` (Swagger UI).
 
 ### Event consumption (RabbitMQ)
 

@@ -7,6 +7,8 @@
 package iotv1
 
 import (
+	_ "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2/options"
+	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
@@ -2482,7 +2484,7 @@ var File_iot_v1_device_proto protoreflect.FileDescriptor
 
 const file_iot_v1_device_proto_rawDesc = "" +
 	"\n" +
-	"\x13iot/v1/device.proto\x12\x06iot.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"\x0f\n" +
+	"\x13iot/v1/device.proto\x12\x06iot.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a.protoc-gen-openapiv2/options/annotations.proto\"\x0f\n" +
 	"\rHealthRequest\"f\n" +
 	"\x0eHealthResponse\x12%\n" +
 	"\x0emqtt_connected\x18\x01 \x01(\bR\rmqttConnected\x12-\n" +
@@ -2492,14 +2494,14 @@ const file_iot_v1_device_proto_rawDesc = "" +
 	"\vresult_code\x18\x02 \x01(\x05R\n" +
 	"resultCode\x12\x18\n" +
 	"\amessage\x18\x03 \x01(\tR\amessage\x12\x15\n" +
-	"\x06msg_id\x18\x04 \x01(\x03R\x05msgId\"\x83\x01\n" +
-	"\x16ConfigureDeviceRequest\x12\x1b\n" +
-	"\tdevice_id\x18\x01 \x01(\tR\bdeviceId\x12\x1c\n" +
+	"\x06msg_id\x18\x04 \x01(\x03R\x05msgId\"\x9f\x01\n" +
+	"\x16ConfigureDeviceRequest\x127\n" +
+	"\tdevice_id\x18\x01 \x01(\tB\x1a\x92A\x172\x15Cabinet serial numberR\bdeviceId\x12\x1c\n" +
 	"\toperation\x18\x02 \x01(\tR\toperation\x12\x16\n" +
 	"\x06param1\x18\x03 \x01(\tR\x06param1\x12\x16\n" +
-	"\x06param2\x18\x04 \x01(\tR\x06param2\"2\n" +
-	"\x13QueryNetworkRequest\x12\x1b\n" +
-	"\tdevice_id\x18\x01 \x01(\tR\bdeviceId\"\xf6\x01\n" +
+	"\x06param2\x18\x04 \x01(\tR\x06param2\"N\n" +
+	"\x13QueryNetworkRequest\x127\n" +
+	"\tdevice_id\x18\x01 \x01(\tB\x1a\x92A\x172\x15Cabinet serial numberR\bdeviceId\"\xf6\x01\n" +
 	"\x15NetworkStatusResponse\x12\x15\n" +
 	"\x06msg_id\x18\x01 \x01(\x03R\x05msgId\x12\x16\n" +
 	"\x06field1\x18\x02 \x01(\tR\x06field1\x12\x16\n" +
@@ -2567,10 +2569,10 @@ const file_iot_v1_device_proto_rawDesc = "" +
 	"\x06msg_id\x18\x01 \x01(\x03R\x05msgId\x12'\n" +
 	"\x0favailable_count\x18\x02 \x01(\x05R\x0eavailableCount\"8\n" +
 	"\x19GetCachedInventoryRequest\x12\x1b\n" +
-	"\tdevice_id\x18\x01 \x01(\tR\bdeviceId\"I\n" +
-	"\x0fCheckoutRequest\x12\x1b\n" +
-	"\tdevice_id\x18\x01 \x01(\tR\bdeviceId\x12\x19\n" +
-	"\border_id\x18\x02 \x01(\tR\aorderId\"p\n" +
+	"\tdevice_id\x18\x01 \x01(\tR\bdeviceId\"\x84\x01\n" +
+	"\x0fCheckoutRequest\x127\n" +
+	"\tdevice_id\x18\x01 \x01(\tB\x1a\x92A\x172\x15Cabinet serial numberR\bdeviceId\x128\n" +
+	"\border_id\x18\x02 \x01(\tB\x1d\x92A\x1a2\x18Backend order identifierR\aorderId\"p\n" +
 	"\x13CheckoutFastRequest\x12\x1b\n" +
 	"\tdevice_id\x18\x01 \x01(\tR\bdeviceId\x12\x19\n" +
 	"\border_id\x18\x02 \x01(\tR\aorderId\x12!\n" +
@@ -2578,11 +2580,11 @@ const file_iot_v1_device_proto_rawDesc = "" +
 	"\x13CheckoutSlotRequest\x12\x1b\n" +
 	"\tdevice_id\x18\x01 \x01(\tR\bdeviceId\x12\x19\n" +
 	"\border_id\x18\x02 \x01(\tR\aorderId\x12\x17\n" +
-	"\aslot_id\x18\x03 \x01(\x05R\x06slotId\"\x87\x02\n" +
+	"\aslot_id\x18\x03 \x01(\x05R\x06slotId\"\xaf\x02\n" +
 	"\x10CheckoutResponse\x12\x15\n" +
 	"\x06msg_id\x18\x01 \x01(\x03R\x05msgId\x12\x19\n" +
-	"\border_id\x18\x02 \x01(\tR\aorderId\x12\x1f\n" +
-	"\vresult_code\x18\x03 \x01(\x05R\n" +
+	"\border_id\x18\x02 \x01(\tR\aorderId\x12G\n" +
+	"\vresult_code\x18\x03 \x01(\x05B&\x92A#2!1 = success, other = failure codeR\n" +
 	"resultCode\x12\x17\n" +
 	"\aslot_id\x18\x04 \x01(\x05R\x06slotId\x12\x17\n" +
 	"\abank_id\x18\x05 \x01(\tR\x06bankId\x12#\n" +
@@ -2667,29 +2669,52 @@ const file_iot_v1_device_proto_rawDesc = "" +
 	"\border_id\x18\x01 \x01(\tR\aorderId\x12&\n" +
 	"\x0fcheckout_msg_id\x18\x02 \x01(\x03R\rcheckoutMsgId\x129\n" +
 	"\n" +
-	"started_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tstartedAt2\xac\f\n" +
-	"\rDeviceService\x12J\n" +
-	"\x0fConfigureDevice\x12\x1e.iot.v1.ConfigureDeviceRequest\x1a\x17.iot.v1.CommandResponse\x12J\n" +
-	"\fQueryNetwork\x12\x1b.iot.v1.QueryNetworkRequest\x1a\x1d.iot.v1.NetworkStatusResponse\x12L\n" +
-	"\x0eGetBorrowRules\x12\x1d.iot.v1.GetBorrowRulesRequest\x1a\x1b.iot.v1.BorrowRulesResponse\x12H\n" +
-	"\x0eSetBorrowRules\x12\x1d.iot.v1.SetBorrowRulesRequest\x1a\x17.iot.v1.CommandResponse\x12A\n" +
-	"\tQuerySlot\x12\x18.iot.v1.QuerySlotRequest\x1a\x1a.iot.v1.SlotStatusResponse\x12G\n" +
-	"\rQueryAllSlots\x12\x1c.iot.v1.QueryAllSlotsRequest\x1a\x18.iot.v1.AllSlotsResponse\x12U\n" +
-	"\x11GetAvailableCount\x12 .iot.v1.GetAvailableCountRequest\x1a\x1e.iot.v1.AvailableCountResponse\x12Q\n" +
-	"\x12GetCachedInventory\x12!.iot.v1.GetCachedInventoryRequest\x1a\x18.iot.v1.AllSlotsResponse\x12E\n" +
-	"\x10CheckoutStandard\x12\x17.iot.v1.CheckoutRequest\x1a\x18.iot.v1.CheckoutResponse\x12E\n" +
-	"\fCheckoutFast\x12\x1b.iot.v1.CheckoutFastRequest\x1a\x18.iot.v1.CheckoutResponse\x12E\n" +
-	"\fCheckoutSlot\x12\x1b.iot.v1.CheckoutSlotRequest\x1a\x18.iot.v1.CheckoutResponse\x12R\n" +
-	"\x0fConfirmCheckout\x12\x1e.iot.v1.ConfirmCheckoutRequest\x1a\x1f.iot.v1.ConfirmCheckoutResponse\x12L\n" +
-	"\rConfirmReturn\x12\x1c.iot.v1.ConfirmReturnRequest\x1a\x1d.iot.v1.ConfirmReturnResponse\x12<\n" +
-	"\bEjectAll\x12\x17.iot.v1.EjectAllRequest\x1a\x17.iot.v1.CommandResponse\x12F\n" +
-	"\vDisableSlot\x12\x1a.iot.v1.DisableSlotRequest\x1a\x1b.iot.v1.DisableSlotResponse\x12L\n" +
-	"\rRemoteUpgrade\x12\x1c.iot.v1.RemoteUpgradeRequest\x1a\x1d.iot.v1.RemoteUpgradeResponse\x12J\n" +
-	"\x0fConfigureBankID\x12\x1e.iot.v1.ConfigureBankIDRequest\x1a\x17.iot.v1.CommandResponse\x12H\n" +
-	"\x0eVendingControl\x12\x1d.iot.v1.VendingControlRequest\x1a\x17.iot.v1.CommandResponse\x12M\n" +
-	"\x0eQuerySubBoards\x12\x1d.iot.v1.QuerySubBoardsRequest\x1a\x1c.iot.v1.SubBoardInfoResponse\x12L\n" +
-	"\x0eGetDeviceState\x12\x1d.iot.v1.GetDeviceStateRequest\x1a\x1b.iot.v1.DeviceStateResponse\x127\n" +
-	"\x06Health\x12\x15.iot.v1.HealthRequest\x1a\x16.iot.v1.HealthResponseBKZIgithub.com/victormazeli/iot-middleware-grpc-interface/gen/go/iot/v1;iotv1b\x06proto3"
+	"started_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tstartedAt2\xe2\x1a\n" +
+	"\rDeviceService\x12\x9b\x01\n" +
+	"\x0fConfigureDevice\x12\x1e.iot.v1.ConfigureDeviceRequest\x1a\x17.iot.v1.CommandResponse\"O\x92A \n" +
+	"\aNetwork\x12\x15Configure device (CS)\x82\xd3\xe4\x93\x02&:\x01*\"!/v1/devices/{device_id}/configure\x12\x9a\x01\n" +
+	"\fQueryNetwork\x12\x1b.iot.v1.QueryNetworkRequest\x1a\x1d.iot.v1.NetworkStatusResponse\"N\x92A$\n" +
+	"\aNetwork\x12\x19Query network status (GN)\x82\xd3\xe4\x93\x02!\x12\x1f/v1/devices/{device_id}/network\x12\xa3\x01\n" +
+	"\x0eGetBorrowRules\x12\x1d.iot.v1.GetBorrowRulesRequest\x1a\x1b.iot.v1.BorrowRulesResponse\"U\x92A&\n" +
+	"\aNetwork\x12\x1bGet borrow rules (CM query)\x82\xd3\xe4\x93\x02&\x12$/v1/devices/{device_id}/borrow-rules\x12\xa0\x01\n" +
+	"\x0eSetBorrowRules\x12\x1d.iot.v1.SetBorrowRulesRequest\x1a\x17.iot.v1.CommandResponse\"V\x92A$\n" +
+	"\aNetwork\x12\x19Set borrow rules (CM set)\x82\xd3\xe4\x93\x02):\x01*\x1a$/v1/devices/{device_id}/borrow-rules\x12\x98\x01\n" +
+	"\tQuerySlot\x12\x18.iot.v1.QuerySlotRequest\x1a\x1a.iot.v1.SlotStatusResponse\"U\x92A#\n" +
+	"\tInventory\x12\x16Query single slot (CQ)\x82\xd3\xe4\x93\x02)\x12'/v1/devices/{device_id}/slots/{slot_id}\x12\x92\x01\n" +
+	"\rQueryAllSlots\x12\x1c.iot.v1.QueryAllSlotsRequest\x1a\x18.iot.v1.AllSlotsResponse\"I\x92A!\n" +
+	"\tInventory\x12\x14Query all slots (AC)\x82\xd3\xe4\x93\x02\x1f\x12\x1d/v1/devices/{device_id}/slots\x12\xb9\x01\n" +
+	"\x11GetAvailableCount\x12 .iot.v1.GetAvailableCountRequest\x1a\x1e.iot.v1.AvailableCountResponse\"b\x92A0\n" +
+	"\tInventory\x12#Get available power bank count (CC)\x82\xd3\xe4\x93\x02)\x12'/v1/devices/{device_id}/available-count\x12\xb0\x01\n" +
+	"\x12GetCachedInventory\x12!.iot.v1.GetCachedInventoryRequest\x1a\x18.iot.v1.AllSlotsResponse\"]\x92A*\n" +
+	"\tInventory\x12\x1dGet cached inventory snapshot\x82\xd3\xe4\x93\x02*\x12(/v1/devices/{device_id}/inventory/cached\x12\xa4\x01\n" +
+	"\x10CheckoutStandard\x12\x17.iot.v1.CheckoutRequest\x1a\x18.iot.v1.CheckoutResponse\"]\x92A&\n" +
+	"\x06Rental\x12\x1cStart standard checkout (BW)\x82\xd3\xe4\x93\x02.:\x01*\")/v1/devices/{device_id}/checkout/standard\x12\xa3\x01\n" +
+	"\fCheckoutFast\x12\x1b.iot.v1.CheckoutFastRequest\x1a\x18.iot.v1.CheckoutResponse\"\\\x92A)\n" +
+	"\x06Rental\x12\x1fStart fast-charge checkout (KW)\x82\xd3\xe4\x93\x02*:\x01*\"%/v1/devices/{device_id}/checkout/fast\x12\xa4\x01\n" +
+	"\fCheckoutSlot\x12\x1b.iot.v1.CheckoutSlotRequest\x1a\x18.iot.v1.CheckoutResponse\"]\x92A*\n" +
+	"\x06Rental\x12 Checkout from specific slot (FB)\x82\xd3\xe4\x93\x02*:\x01*\"%/v1/devices/{device_id}/checkout/slot\x12\xb7\x01\n" +
+	"\x0fConfirmCheckout\x12\x1e.iot.v1.ConfirmCheckoutRequest\x1a\x1f.iot.v1.ConfirmCheckoutResponse\"c\x92A-\n" +
+	"\x06Rental\x12#Confirm checkout after payment (BR)\x82\xd3\xe4\x93\x02-:\x01*\"(/v1/devices/{device_id}/checkout/confirm\x12\xa5\x01\n" +
+	"\rConfirmReturn\x12\x1c.iot.v1.ConfirmReturnRequest\x1a\x1d.iot.v1.ConfirmReturnResponse\"W\x92A\"\n" +
+	"\aReturns\x12\x17Confirm return (RS ack)\x82\xd3\xe4\x93\x02,:\x01*\"'/v1/devices/{device_id}/returns/confirm\x12\x8e\x01\n" +
+	"\bEjectAll\x12\x17.iot.v1.EjectAllRequest\x1a\x17.iot.v1.CommandResponse\"P\x92A\x1f\n" +
+	"\x05Admin\x12\x16Eject power banks (FA)\x82\xd3\xe4\x93\x02(:\x01*\"#/v1/devices/{device_id}/admin/eject\x12\xa6\x01\n" +
+	"\vDisableSlot\x12\x1a.iot.v1.DisableSlotRequest\x1a\x1b.iot.v1.DisableSlotResponse\"^\x92A%\n" +
+	"\x05Admin\x12\x1cEnable or disable slots (FL)\x82\xd3\xe4\x93\x020:\x01*\"+/v1/devices/{device_id}/admin/slots/disable\x12\xa6\x01\n" +
+	"\rRemoteUpgrade\x12\x1c.iot.v1.RemoteUpgradeRequest\x1a\x1d.iot.v1.RemoteUpgradeResponse\"X\x92A%\n" +
+	"\x05Admin\x12\x1cRemote firmware upgrade (OT)\x82\xd3\xe4\x93\x02*:\x01*\"%/v1/devices/{device_id}/admin/upgrade\x12\x9e\x01\n" +
+	"\x0fConfigureBankID\x12\x1e.iot.v1.ConfigureBankIDRequest\x1a\x17.iot.v1.CommandResponse\"R\x92A\x1f\n" +
+	"\x05Admin\x12\x16Configure bank ID (NI)\x82\xd3\xe4\x93\x02*:\x01*\"%/v1/devices/{device_id}/admin/bank-id\x12\xa2\x01\n" +
+	"\x0eVendingControl\x12\x1d.iot.v1.VendingControlRequest\x1a\x17.iot.v1.CommandResponse\"X\x92A%\n" +
+	"\x05Admin\x12\x1cVending machine control (SO)\x82\xd3\xe4\x93\x02*:\x01*\"%/v1/devices/{device_id}/admin/vending\x12\x9e\x01\n" +
+	"\x0eQuerySubBoards\x12\x1d.iot.v1.QuerySubBoardsRequest\x1a\x1c.iot.v1.SubBoardInfoResponse\"O\x92A\"\n" +
+	"\x05Admin\x12\x19Query sub-board info (SQ)\x82\xd3\xe4\x93\x02$\x12\"/v1/devices/{device_id}/sub-boards\x12\xa0\x01\n" +
+	"\x0eGetDeviceState\x12\x1d.iot.v1.GetDeviceStateRequest\x1a\x1b.iot.v1.DeviceStateResponse\"R\x92A*\n" +
+	"\rObservability\x12\x19Get device state snapshot\x82\xd3\xe4\x93\x02\x1f\x12\x1d/v1/devices/{device_id}/state\x12k\n" +
+	"\x06Health\x12\x15.iot.v1.HealthRequest\x1a\x16.iot.v1.HealthResponse\"2\x92A\x1d\n" +
+	"\rObservability\x12\fHealth check\x82\xd3\xe4\x93\x02\f\x12\n" +
+	"/v1/healthB\xd7\x01\x92A\x88\x01\x12^\n" +
+	"\x17IoT Middleware REST API\x12>REST/JSON facade for DeviceService. Events remain on RabbitMQ.2\x031.0*\x02\x01\x022\x10application/json:\x10application/jsonZIgithub.com/victormazeli/iot-middleware-grpc-interface/gen/go/iot/v1;iotv1b\x06proto3"
 
 var (
 	file_iot_v1_device_proto_rawDescOnce sync.Once

@@ -1,0 +1,1380 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "IoT Middleware REST API",
+    "description": "REST/JSON facade for DeviceService. Events remain on RabbitMQ.",
+    "version": "1.0"
+  },
+  "tags": [
+    {
+      "name": "DeviceService"
+    }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/devices/{deviceId}/admin/bank-id": {
+      "post": {
+        "summary": "Configure bank ID (NI)",
+        "operationId": "DeviceService_ConfigureBankID",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CommandResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeviceServiceConfigureBankIDBody"
+            }
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/v1/devices/{deviceId}/admin/eject": {
+      "post": {
+        "summary": "Eject power banks (FA)",
+        "operationId": "DeviceService_EjectAll",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CommandResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeviceServiceEjectAllBody"
+            }
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/v1/devices/{deviceId}/admin/slots/disable": {
+      "post": {
+        "summary": "Enable or disable slots (FL)",
+        "operationId": "DeviceService_DisableSlot",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DisableSlotResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeviceServiceDisableSlotBody"
+            }
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/v1/devices/{deviceId}/admin/upgrade": {
+      "post": {
+        "summary": "Remote firmware upgrade (OT)",
+        "operationId": "DeviceService_RemoteUpgrade",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RemoteUpgradeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeviceServiceRemoteUpgradeBody"
+            }
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/v1/devices/{deviceId}/admin/vending": {
+      "post": {
+        "summary": "Vending machine control (SO)",
+        "operationId": "DeviceService_VendingControl",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CommandResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeviceServiceVendingControlBody"
+            }
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/v1/devices/{deviceId}/available-count": {
+      "get": {
+        "summary": "Get available power bank count (CC)",
+        "operationId": "DeviceService_GetAvailableCount",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AvailableCountResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Inventory"
+        ]
+      }
+    },
+    "/v1/devices/{deviceId}/borrow-rules": {
+      "get": {
+        "summary": "Get borrow rules (CM query)",
+        "operationId": "DeviceService_GetBorrowRules",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1BorrowRulesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Network"
+        ]
+      },
+      "put": {
+        "summary": "Set borrow rules (CM set)",
+        "operationId": "DeviceService_SetBorrowRules",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CommandResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeviceServiceSetBorrowRulesBody"
+            }
+          }
+        ],
+        "tags": [
+          "Network"
+        ]
+      }
+    },
+    "/v1/devices/{deviceId}/checkout/confirm": {
+      "post": {
+        "summary": "Confirm checkout after payment (BR)",
+        "operationId": "DeviceService_ConfirmCheckout",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ConfirmCheckoutResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeviceServiceConfirmCheckoutBody"
+            }
+          }
+        ],
+        "tags": [
+          "Rental"
+        ]
+      }
+    },
+    "/v1/devices/{deviceId}/checkout/fast": {
+      "post": {
+        "summary": "Start fast-charge checkout (KW)",
+        "operationId": "DeviceService_CheckoutFast",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CheckoutResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeviceServiceCheckoutFastBody"
+            }
+          }
+        ],
+        "tags": [
+          "Rental"
+        ]
+      }
+    },
+    "/v1/devices/{deviceId}/checkout/slot": {
+      "post": {
+        "summary": "Checkout from specific slot (FB)",
+        "operationId": "DeviceService_CheckoutSlot",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CheckoutResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeviceServiceCheckoutSlotBody"
+            }
+          }
+        ],
+        "tags": [
+          "Rental"
+        ]
+      }
+    },
+    "/v1/devices/{deviceId}/checkout/standard": {
+      "post": {
+        "summary": "Start standard checkout (BW)",
+        "operationId": "DeviceService_CheckoutStandard",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CheckoutResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "deviceId",
+            "description": "Cabinet serial number",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeviceServiceCheckoutStandardBody"
+            }
+          }
+        ],
+        "tags": [
+          "Rental"
+        ]
+      }
+    },
+    "/v1/devices/{deviceId}/configure": {
+      "post": {
+        "summary": "Configure device (CS)",
+        "operationId": "DeviceService_ConfigureDevice",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CommandResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "deviceId",
+            "description": "Cabinet serial number",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeviceServiceConfigureDeviceBody"
+            }
+          }
+        ],
+        "tags": [
+          "Network"
+        ]
+      }
+    },
+    "/v1/devices/{deviceId}/inventory/cached": {
+      "get": {
+        "summary": "Get cached inventory snapshot",
+        "operationId": "DeviceService_GetCachedInventory",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AllSlotsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Inventory"
+        ]
+      }
+    },
+    "/v1/devices/{deviceId}/network": {
+      "get": {
+        "summary": "Query network status (GN)",
+        "operationId": "DeviceService_QueryNetwork",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1NetworkStatusResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "deviceId",
+            "description": "Cabinet serial number",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Network"
+        ]
+      }
+    },
+    "/v1/devices/{deviceId}/returns/confirm": {
+      "post": {
+        "summary": "Confirm return (RS ack)",
+        "operationId": "DeviceService_ConfirmReturn",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ConfirmReturnResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeviceServiceConfirmReturnBody"
+            }
+          }
+        ],
+        "tags": [
+          "Returns"
+        ]
+      }
+    },
+    "/v1/devices/{deviceId}/slots": {
+      "get": {
+        "summary": "Query all slots (AC)",
+        "operationId": "DeviceService_QueryAllSlots",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AllSlotsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Inventory"
+        ]
+      }
+    },
+    "/v1/devices/{deviceId}/slots/{slotId}": {
+      "get": {
+        "summary": "Query single slot (CQ)",
+        "operationId": "DeviceService_QuerySlot",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SlotStatusResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "slotId",
+            "description": "0 = all slots (returns AC)",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "Inventory"
+        ]
+      }
+    },
+    "/v1/devices/{deviceId}/state": {
+      "get": {
+        "summary": "Get device state snapshot",
+        "operationId": "DeviceService_GetDeviceState",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeviceStateResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Observability"
+        ]
+      }
+    },
+    "/v1/devices/{deviceId}/sub-boards": {
+      "get": {
+        "summary": "Query sub-board info (SQ)",
+        "operationId": "DeviceService_QuerySubBoards",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SubBoardInfoResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "opCode",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/v1/health": {
+      "get": {
+        "summary": "Health check",
+        "operationId": "DeviceService_Health",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1HealthResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Observability"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "DeviceServiceCheckoutFastBody": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        },
+        "borrowParam": {
+          "type": "string",
+          "title": "\"0\" standard, \"1\" fast-charge"
+        }
+      }
+    },
+    "DeviceServiceCheckoutSlotBody": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        },
+        "slotId": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "DeviceServiceCheckoutStandardBody": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string",
+          "description": "Backend order identifier"
+        }
+      }
+    },
+    "DeviceServiceConfigureBankIDBody": {
+      "type": "object",
+      "properties": {
+        "slotId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "newBankId": {
+          "type": "string"
+        }
+      }
+    },
+    "DeviceServiceConfigureDeviceBody": {
+      "type": "object",
+      "properties": {
+        "operation": {
+          "type": "string",
+          "description": "RESETME, PK, UN, PW, ID, DM, SAVECFG, etc."
+        },
+        "param1": {
+          "type": "string"
+        },
+        "param2": {
+          "type": "string"
+        }
+      }
+    },
+    "DeviceServiceConfirmCheckoutBody": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        }
+      }
+    },
+    "DeviceServiceConfirmReturnBody": {
+      "type": "object",
+      "properties": {
+        "slotNo": {
+          "type": "integer",
+          "format": "int32",
+          "title": "0 = batch confirm all"
+        },
+        "confirmCode": {
+          "type": "integer",
+          "format": "int32",
+          "title": "1 = OK, 0 = abnormal"
+        }
+      }
+    },
+    "DeviceServiceDisableSlotBody": {
+      "type": "object",
+      "properties": {
+        "slotNo": {
+          "type": "integer",
+          "format": "int32",
+          "title": "0 = all"
+        },
+        "opCode": {
+          "type": "integer",
+          "format": "int32",
+          "title": "0 = enable, 1 = disable"
+        }
+      }
+    },
+    "DeviceServiceEjectAllBody": {
+      "type": "object",
+      "properties": {
+        "slotNo": {
+          "type": "integer",
+          "format": "int32",
+          "title": "0 = all"
+        }
+      }
+    },
+    "DeviceServiceRemoteUpgradeBody": {
+      "type": "object",
+      "properties": {
+        "opCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "domain": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "path": {
+          "type": "string"
+        },
+        "md5": {
+          "type": "string"
+        },
+        "fileSize": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "DeviceServiceSetBorrowRulesBody": {
+      "type": "object",
+      "properties": {
+        "minBorrowLevel": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "checkoutOpCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "returnOpCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "lockFaultOpCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "voiceOpCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "debugOpCode": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "DeviceServiceVendingControlBody": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        },
+        "channelParam": {
+          "type": "string"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1AllSlotsResponse": {
+      "type": "object",
+      "properties": {
+        "msgId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "deviceQrCode": {
+          "type": "string"
+        },
+        "deviceAddr": {
+          "type": "string"
+        },
+        "deviceInfo1": {
+          "type": "string"
+        },
+        "signalStrength": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "firmwareVersion": {
+          "type": "string"
+        },
+        "totalSlots": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "slots": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1SlotEntry"
+          }
+        }
+      }
+    },
+    "v1AvailableCountResponse": {
+      "type": "object",
+      "properties": {
+        "msgId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "availableCount": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "v1BorrowRulesResponse": {
+      "type": "object",
+      "properties": {
+        "msgId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "minBorrowLevel": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "checkoutOpCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "returnOpCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "lockFaultOpCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "voiceOpCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "debugOpCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "slotDisableMask": {
+          "type": "string"
+        },
+        "inventoryInterval": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "heartbeatInterval": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "brandIsolationInfo": {
+          "type": "string"
+        }
+      }
+    },
+    "v1CheckoutResponse": {
+      "type": "object",
+      "properties": {
+        "msgId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "orderId": {
+          "type": "string"
+        },
+        "resultCode": {
+          "type": "integer",
+          "format": "int32",
+          "description": "1 = success, other = failure code"
+        },
+        "slotId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "bankId": {
+          "type": "string"
+        },
+        "batteryLevel": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "lockStatus": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "fastChargeFlag": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "v1CommandResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "resultCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "msgId": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1ConfirmCheckoutResponse": {
+      "type": "object",
+      "properties": {
+        "msgId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "orderId": {
+          "type": "string"
+        },
+        "resultCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "slotId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "bankId": {
+          "type": "string"
+        },
+        "batteryLevel": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "lockStatus": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "fastChargeFlag": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "v1ConfirmReturnResponse": {
+      "type": "object",
+      "properties": {
+        "msgId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "v1DeviceStateResponse": {
+      "type": "object",
+      "properties": {
+        "deviceId": {
+          "type": "string"
+        },
+        "online": {
+          "type": "boolean"
+        },
+        "lastSeen": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "firmwareVersion": {
+          "type": "string"
+        },
+        "signalStrength": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "cachedInventory": {
+          "$ref": "#/definitions/v1AllSlotsResponse"
+        },
+        "pendingCheckout": {
+          "$ref": "#/definitions/v1PendingCheckout"
+        }
+      }
+    },
+    "v1DisableSlotResponse": {
+      "type": "object",
+      "properties": {
+        "msgId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "allSlotsDisableStatus": {
+          "type": "string"
+        }
+      }
+    },
+    "v1HealthResponse": {
+      "type": "object",
+      "properties": {
+        "mqttConnected": {
+          "type": "boolean"
+        },
+        "rabbitmqConnected": {
+          "type": "boolean"
+        }
+      }
+    },
+    "v1NetworkStatusResponse": {
+      "type": "object",
+      "properties": {
+        "msgId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "field1": {
+          "type": "string",
+          "title": "IMEI or MAC"
+        },
+        "field2": {
+          "type": "string",
+          "title": "ICCID or WiFi model"
+        },
+        "signalStrength": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "field5": {
+          "type": "string"
+        },
+        "field6": {
+          "type": "string"
+        },
+        "field7": {
+          "type": "string"
+        },
+        "networkStatus": {
+          "type": "string"
+        }
+      }
+    },
+    "v1PendingCheckout": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        },
+        "checkoutMsgId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "startedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1RemoteUpgradeResponse": {
+      "type": "object",
+      "properties": {
+        "resultCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "resultInfo": {
+          "type": "string"
+        }
+      }
+    },
+    "v1SlotEntry": {
+      "type": "object",
+      "properties": {
+        "slotId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "returnStatus": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "bankId": {
+          "type": "string"
+        },
+        "batteryLevel": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "statusFlags": {
+          "type": "string"
+        }
+      }
+    },
+    "v1SlotStatusResponse": {
+      "type": "object",
+      "properties": {
+        "msgId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "slotId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "bankId": {
+          "type": "string"
+        },
+        "batteryLevel": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "statusFlags": {
+          "type": "string",
+          "title": "S1S2S3S4"
+        },
+        "returnStatus": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "v1SubBoardEntry": {
+      "type": "object",
+      "properties": {
+        "index": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "boardId": {
+          "type": "string"
+        },
+        "firmware": {
+          "type": "string"
+        }
+      }
+    },
+    "v1SubBoardInfoResponse": {
+      "type": "object",
+      "properties": {
+        "msgId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "subBoardCount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "boards": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1SubBoardEntry"
+          }
+        }
+      }
+    }
+  }
+}

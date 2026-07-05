@@ -4,43 +4,237 @@ package iot.v1;
 
 option go_package = "github.com/victormazeli/iot-middleware-grpc-interface/gen/go/iot/v1;iotv1";
 
+import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "IoT Middleware REST API";
+    version: "1.0";
+    description: "REST/JSON facade for DeviceService. Events remain on RabbitMQ.";
+  };
+  schemes: HTTP;
+  schemes: HTTPS;
+  consumes: "application/json";
+  produces: "application/json";
+};
 
 // DeviceService is the gRPC API exposed by the IoT middleware.
 // Backends call these RPCs; middleware translates them to cabinet protocol frames over MQTT.
 service DeviceService {
   // Network & maintenance (CS, GN, CM)
-  rpc ConfigureDevice(ConfigureDeviceRequest) returns (CommandResponse);
-  rpc QueryNetwork(QueryNetworkRequest) returns (NetworkStatusResponse);
-  rpc GetBorrowRules(GetBorrowRulesRequest) returns (BorrowRulesResponse);
-  rpc SetBorrowRules(SetBorrowRulesRequest) returns (CommandResponse);
+  rpc ConfigureDevice(ConfigureDeviceRequest) returns (CommandResponse) {
+    option (google.api.http) = {
+      post: "/v1/devices/{device_id}/configure"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Configure device (CS)";
+      tags: "Network";
+    };
+  }
+  rpc QueryNetwork(QueryNetworkRequest) returns (NetworkStatusResponse) {
+    option (google.api.http) = {
+      get: "/v1/devices/{device_id}/network"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Query network status (GN)";
+      tags: "Network";
+    };
+  }
+  rpc GetBorrowRules(GetBorrowRulesRequest) returns (BorrowRulesResponse) {
+    option (google.api.http) = {
+      get: "/v1/devices/{device_id}/borrow-rules"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Get borrow rules (CM query)";
+      tags: "Network";
+    };
+  }
+  rpc SetBorrowRules(SetBorrowRulesRequest) returns (CommandResponse) {
+    option (google.api.http) = {
+      put: "/v1/devices/{device_id}/borrow-rules"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Set borrow rules (CM set)";
+      tags: "Network";
+    };
+  }
 
   // Inventory (CQ, CC, cached AC)
-  rpc QuerySlot(QuerySlotRequest) returns (SlotStatusResponse);
-  rpc QueryAllSlots(QueryAllSlotsRequest) returns (AllSlotsResponse);
-  rpc GetAvailableCount(GetAvailableCountRequest) returns (AvailableCountResponse);
-  rpc GetCachedInventory(GetCachedInventoryRequest) returns (AllSlotsResponse);
+  rpc QuerySlot(QuerySlotRequest) returns (SlotStatusResponse) {
+    option (google.api.http) = {
+      get: "/v1/devices/{device_id}/slots/{slot_id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Query single slot (CQ)";
+      tags: "Inventory";
+    };
+  }
+  rpc QueryAllSlots(QueryAllSlotsRequest) returns (AllSlotsResponse) {
+    option (google.api.http) = {
+      get: "/v1/devices/{device_id}/slots"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Query all slots (AC)";
+      tags: "Inventory";
+    };
+  }
+  rpc GetAvailableCount(GetAvailableCountRequest) returns (AvailableCountResponse) {
+    option (google.api.http) = {
+      get: "/v1/devices/{device_id}/available-count"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Get available power bank count (CC)";
+      tags: "Inventory";
+    };
+  }
+  rpc GetCachedInventory(GetCachedInventoryRequest) returns (AllSlotsResponse) {
+    option (google.api.http) = {
+      get: "/v1/devices/{device_id}/inventory/cached"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Get cached inventory snapshot";
+      tags: "Inventory";
+    };
+  }
 
   // Rental (BW, KW, FB, BR)
-  rpc CheckoutStandard(CheckoutRequest) returns (CheckoutResponse);
-  rpc CheckoutFast(CheckoutFastRequest) returns (CheckoutResponse);
-  rpc CheckoutSlot(CheckoutSlotRequest) returns (CheckoutResponse);
-  rpc ConfirmCheckout(ConfirmCheckoutRequest) returns (ConfirmCheckoutResponse);
+  rpc CheckoutStandard(CheckoutRequest) returns (CheckoutResponse) {
+    option (google.api.http) = {
+      post: "/v1/devices/{device_id}/checkout/standard"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Start standard checkout (BW)";
+      tags: "Rental";
+    };
+  }
+  rpc CheckoutFast(CheckoutFastRequest) returns (CheckoutResponse) {
+    option (google.api.http) = {
+      post: "/v1/devices/{device_id}/checkout/fast"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Start fast-charge checkout (KW)";
+      tags: "Rental";
+    };
+  }
+  rpc CheckoutSlot(CheckoutSlotRequest) returns (CheckoutResponse) {
+    option (google.api.http) = {
+      post: "/v1/devices/{device_id}/checkout/slot"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Checkout from specific slot (FB)";
+      tags: "Rental";
+    };
+  }
+  rpc ConfirmCheckout(ConfirmCheckoutRequest) returns (ConfirmCheckoutResponse) {
+    option (google.api.http) = {
+      post: "/v1/devices/{device_id}/checkout/confirm"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Confirm checkout after payment (BR)";
+      tags: "Rental";
+    };
+  }
 
   // Returns (RS server-initiated confirm)
-  rpc ConfirmReturn(ConfirmReturnRequest) returns (ConfirmReturnResponse);
+  rpc ConfirmReturn(ConfirmReturnRequest) returns (ConfirmReturnResponse) {
+    option (google.api.http) = {
+      post: "/v1/devices/{device_id}/returns/confirm"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Confirm return (RS ack)";
+      tags: "Returns";
+    };
+  }
 
   // Admin (FA, FL, OT, NI, SO, SQ)
-  rpc EjectAll(EjectAllRequest) returns (CommandResponse);
-  rpc DisableSlot(DisableSlotRequest) returns (DisableSlotResponse);
-  rpc RemoteUpgrade(RemoteUpgradeRequest) returns (RemoteUpgradeResponse);
-  rpc ConfigureBankID(ConfigureBankIDRequest) returns (CommandResponse);
-  rpc VendingControl(VendingControlRequest) returns (CommandResponse);
-  rpc QuerySubBoards(QuerySubBoardsRequest) returns (SubBoardInfoResponse);
+  rpc EjectAll(EjectAllRequest) returns (CommandResponse) {
+    option (google.api.http) = {
+      post: "/v1/devices/{device_id}/admin/eject"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Eject power banks (FA)";
+      tags: "Admin";
+    };
+  }
+  rpc DisableSlot(DisableSlotRequest) returns (DisableSlotResponse) {
+    option (google.api.http) = {
+      post: "/v1/devices/{device_id}/admin/slots/disable"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Enable or disable slots (FL)";
+      tags: "Admin";
+    };
+  }
+  rpc RemoteUpgrade(RemoteUpgradeRequest) returns (RemoteUpgradeResponse) {
+    option (google.api.http) = {
+      post: "/v1/devices/{device_id}/admin/upgrade"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Remote firmware upgrade (OT)";
+      tags: "Admin";
+    };
+  }
+  rpc ConfigureBankID(ConfigureBankIDRequest) returns (CommandResponse) {
+    option (google.api.http) = {
+      post: "/v1/devices/{device_id}/admin/bank-id"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Configure bank ID (NI)";
+      tags: "Admin";
+    };
+  }
+  rpc VendingControl(VendingControlRequest) returns (CommandResponse) {
+    option (google.api.http) = {
+      post: "/v1/devices/{device_id}/admin/vending"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Vending machine control (SO)";
+      tags: "Admin";
+    };
+  }
+  rpc QuerySubBoards(QuerySubBoardsRequest) returns (SubBoardInfoResponse) {
+    option (google.api.http) = {
+      get: "/v1/devices/{device_id}/sub-boards"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Query sub-board info (SQ)";
+      tags: "Admin";
+    };
+  }
 
   // Observability
-  rpc GetDeviceState(GetDeviceStateRequest) returns (DeviceStateResponse);
-  rpc Health(HealthRequest) returns (HealthResponse);
+  rpc GetDeviceState(GetDeviceStateRequest) returns (DeviceStateResponse) {
+    option (google.api.http) = {
+      get: "/v1/devices/{device_id}/state"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Get device state snapshot";
+      tags: "Observability";
+    };
+  }
+  rpc Health(HealthRequest) returns (HealthResponse) {
+    option (google.api.http) = {
+      get: "/v1/health"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Health check";
+      tags: "Observability";
+    };
+  }
 }
 
 message HealthRequest {}
@@ -59,7 +253,7 @@ message CommandResponse {
 // --- ConfigureDevice (CS) ---
 
 message ConfigureDeviceRequest {
-  string device_id = 1;
+  string device_id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "Cabinet serial number"}];
   string operation = 2; // RESETME, PK, UN, PW, ID, DM, SAVECFG, etc.
   string param1 = 3;
   string param2 = 4;
@@ -68,7 +262,7 @@ message ConfigureDeviceRequest {
 // --- QueryNetwork (GN) ---
 
 message QueryNetworkRequest {
-  string device_id = 1;
+  string device_id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "Cabinet serial number"}];
 }
 
 message NetworkStatusResponse {
@@ -167,8 +361,8 @@ message GetCachedInventoryRequest {
 // --- Rental ---
 
 message CheckoutRequest {
-  string device_id = 1;
-  string order_id = 2;
+  string device_id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "Cabinet serial number"}];
+  string order_id = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "Backend order identifier"}];
 }
 
 message CheckoutFastRequest {
@@ -186,7 +380,7 @@ message CheckoutSlotRequest {
 message CheckoutResponse {
   int64 msg_id = 1;
   string order_id = 2;
-  int32 result_code = 3;
+  int32 result_code = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "1 = success, other = failure code"}];
   int32 slot_id = 4;
   string bank_id = 5;
   int32 battery_level = 6;
