@@ -12,7 +12,7 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   info: {
     title: "IoT Middleware REST API";
     version: "1.0";
-    description: "REST/JSON facade for DeviceService. Events remain on RabbitMQ.";
+    description: "REST/JSON facade for DeviceService. Events remain on NATS JetStream.";
   };
   schemes: HTTP;
   schemes: HTTPS;

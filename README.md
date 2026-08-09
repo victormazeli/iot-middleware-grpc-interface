@@ -44,9 +44,10 @@ Import into Postman: **Import → File** (use path above) or **Import → Link**
 
 Interactive docs: `http://localhost:8080/docs` (Swagger UI).
 
-### Event consumption (RabbitMQ)
+### Event consumption (NATS JetStream)
 
-Events are published as JSON `EventEnvelope` messages. Deserialize with `protojson`:
+Events are published as JSON `EventEnvelope` messages on stream `IOT_EVENTS`
+(subjects `iot.events.<routingKey>`). Deserialize with `protojson`:
 
 ```go
 import "google.golang.org/protobuf/encoding/protojson"

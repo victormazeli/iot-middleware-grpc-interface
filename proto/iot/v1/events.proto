@@ -6,7 +6,7 @@ option go_package = "github.com/victormazeli/iot-middleware-grpc-interface/gen/g
 
 import "google/protobuf/timestamp.proto";
 
-// EventEnvelope is published to RabbitMQ exchange iot.events as JSON (protojson).
+// EventEnvelope is published to NATS JetStream subject prefix iot.events as JSON (protojson).
 message EventEnvelope {
   string event_id = 1;
   string type = 2;

@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "title": "IoT Middleware REST API",
-    "description": "REST/JSON facade for DeviceService. Events remain on RabbitMQ.",
+    "description": "REST/JSON facade for DeviceService. Events remain on NATS JetStream.",
     "version": "1.0"
   },
   "tags": [

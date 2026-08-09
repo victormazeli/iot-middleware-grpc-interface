@@ -2713,8 +2713,8 @@ const file_iot_v1_device_proto_rawDesc = "" +
 	"\rObservability\x12\x19Get device state snapshot\x82\xd3\xe4\x93\x02\x1f\x12\x1d/v1/devices/{device_id}/state\x12k\n" +
 	"\x06Health\x12\x15.iot.v1.HealthRequest\x1a\x16.iot.v1.HealthResponse\"2\x92A\x1d\n" +
 	"\rObservability\x12\fHealth check\x82\xd3\xe4\x93\x02\f\x12\n" +
-	"/v1/healthB\xd7\x01\x92A\x88\x01\x12^\n" +
-	"\x17IoT Middleware REST API\x12>REST/JSON facade for DeviceService. Events remain on RabbitMQ.2\x031.0*\x02\x01\x022\x10application/json:\x10application/jsonZIgithub.com/victormazeli/iot-middleware-grpc-interface/gen/go/iot/v1;iotv1b\x06proto3"
+	"/v1/healthB\xdd\x01\x92A\x8e\x01\x12d\n" +
+	"\x17IoT Middleware REST API\x12DREST/JSON facade for DeviceService. Events remain on NATS JetStream.2\x031.0*\x02\x01\x022\x10application/json:\x10application/jsonZIgithub.com/victormazeli/iot-middleware-grpc-interface/gen/go/iot/v1;iotv1b\x06proto3"
 
 var (
 	file_iot_v1_device_proto_rawDescOnce sync.Once

@@ -22,7 +22,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// EventEnvelope is published to RabbitMQ exchange iot.events as JSON (protojson).
+// EventEnvelope is published to NATS JetStream subject prefix iot.events as JSON (protojson).
 type EventEnvelope struct {
 	state      protoimpl.MessageState `protogen:"open.v1"`
 	EventId    string                 `protobuf:"bytes,1,opt,name=event_id,json=eventId,proto3" json:"event_id,omitempty"`
