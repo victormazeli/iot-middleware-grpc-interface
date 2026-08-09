@@ -240,7 +240,7 @@ service DeviceService {
 message HealthRequest {}
 message HealthResponse {
   bool mqtt_connected = 1;
-  bool rabbitmq_connected = 2;
+  bool nats_connected = 2;
 }
 
 message CommandResponse {

@@ -61,11 +61,11 @@ func (*HealthRequest) Descriptor() ([]byte, []int) {
 }
 
 type HealthResponse struct {
-	state             protoimpl.MessageState `protogen:"open.v1"`
-	MqttConnected     bool                   `protobuf:"varint,1,opt,name=mqtt_connected,json=mqttConnected,proto3" json:"mqtt_connected,omitempty"`
-	RabbitmqConnected bool                   `protobuf:"varint,2,opt,name=rabbitmq_connected,json=rabbitmqConnected,proto3" json:"rabbitmq_connected,omitempty"`
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	MqttConnected bool                   `protobuf:"varint,1,opt,name=mqtt_connected,json=mqttConnected,proto3" json:"mqtt_connected,omitempty"`
+	NatsConnected bool                   `protobuf:"varint,2,opt,name=nats_connected,json=natsConnected,proto3" json:"nats_connected,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *HealthResponse) Reset() {
@@ -105,9 +105,9 @@ func (x *HealthResponse) GetMqttConnected() bool {
 	return false
 }
 
-func (x *HealthResponse) GetRabbitmqConnected() bool {
+func (x *HealthResponse) GetNatsConnected() bool {
 	if x != nil {
-		return x.RabbitmqConnected
+		return x.NatsConnected
 	}
 	return false
 }
@@ -2485,10 +2485,10 @@ var File_iot_v1_device_proto protoreflect.FileDescriptor
 const file_iot_v1_device_proto_rawDesc = "" +
 	"\n" +
 	"\x13iot/v1/device.proto\x12\x06iot.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a.protoc-gen-openapiv2/options/annotations.proto\"\x0f\n" +
-	"\rHealthRequest\"f\n" +
+	"\rHealthRequest\"^\n" +
 	"\x0eHealthResponse\x12%\n" +
-	"\x0emqtt_connected\x18\x01 \x01(\bR\rmqttConnected\x12-\n" +
-	"\x12rabbitmq_connected\x18\x02 \x01(\bR\x11rabbitmqConnected\"}\n" +
+	"\x0emqtt_connected\x18\x01 \x01(\bR\rmqttConnected\x12%\n" +
+	"\x0enats_connected\x18\x02 \x01(\bR\rnatsConnected\"}\n" +
 	"\x0fCommandResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x1f\n" +
 	"\vresult_code\x18\x02 \x01(\x05R\n" +
